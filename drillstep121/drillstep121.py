@@ -15,7 +15,9 @@ class ParentWindow(Frame):
 
         #define our master frame configuration
         self.master = master
+        
         self.master.minsize(1110,430) #(height,width)
+       
         self.master.maxsize(1110,430)
         self.master.title("Check Files")
         self.master.configure(bg="#F0F0F0")
