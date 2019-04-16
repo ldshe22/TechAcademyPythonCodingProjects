@@ -19,7 +19,7 @@ import drillstep122_gui
 
 def OnButtonClick(self):
         dirname = filedialog.askdirectory()
-       
+        self.txt_add.insert('0', dirname)
 
 
           
