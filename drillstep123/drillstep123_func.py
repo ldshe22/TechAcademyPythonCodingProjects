@@ -4,6 +4,10 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 import time
+import shutil
+import sqlite3
+from os import path
+
 
 # filename = filedialog.askopenfilename()
 # filename = filedialog.asksaveasfilename()
@@ -25,22 +29,55 @@ def onbuttonclickdestination(self):
         self.txt_add2.insert('1', direc)
         self.destDir = direc
 
+# chicken = filename
+def onbuttonclickcheckfiles(self):
+        for chicken in os.listdir(self.sourceDir):
+            dest = self.destDir
+            if chicken.endswith(".txt"):
+                print(chicken)
+                drillstep123 = os.path.join(self.sourceDir, chicken)
+                print(drillstep123)
+                modificationtime = time.ctime(os.path.getmtime(drillstep123))
+                print("Last Modified Time: ", modificationtime)
+                conn = sqlite3.connect('drillstep123.db')
+                with conn:
+                    cur = conn.cursor()
+                    cur.execute('CREATE TABLE IF NOT EXISTS tbl_drillstep123(\
+                            ID INTEGER PRIMARY KEY AUTOINCREMENT, \
+                            col_txt TEXT, \
+                            col_movedtimestamp TEXT )')
+                conn.commit()
+                conn.close()
 
-def onbuttonclickcheckfiles(self, modtimesinceepoc=None):
-        for file in os.listdir(self.sourceDir):
-            if file.endswith(".txt"):
-                        print(file)
-                        drillstep123 = os.path.join(self.sourceDir, file)
-                        print(drillstep123)
-                        modificationtime = os.path.getmtime(file)
-                        modificationtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(modtimesinceepoc))
-                        print("Last Modified Time: ", modificationtime)
-        
+                conn = sqlite3.connect('drillstep123.db')
+                with conn:
+                    cur = conn.cursor()
+                    cur.execute('INSERT INTO tbl_drillstep123(col_txt, col_movedtimestamp) VALUES (?,?)', \
+                                (chicken, modificationtime))
+
+                conn.commit()
+                conn.close()
+                shutil.move(drillstep123, dest)
+
+        """
+        # get the path to the file in the current directory
+        src = os.listdir("C:\ldshe\OneDrive\Documents\GitHub\TechAcademyPythonCodingProjects\drillstep123")
+        dest = "C:\ldshe\OneDrive\Documents\GitHub\TechAcademyPythonCodingProjects\drillstep123\__pycache__"
+        for files in src:
+            if files.endswith(".txt"):
+                shutil.move(files,dest)
+        """
 
 
 
 
 
+        """
+        c = conn.cursor()
+        c.execute("")
+        conn.commit()
+        conn.close()
+        """
 
 
 
@@ -48,12 +85,3 @@ def onbuttonclickcheckfiles(self, modtimesinceepoc=None):
 if __name__ == "__main__":
     pass
 
-
-"""
-conn = sqlite3.connect(drillstep123_db.db)
-c = conn.cursor()
-cur.execute("Create Table if not exists tbl_drillstep123( \ID INTEGER PRIMARY KEY AUTOINCREMENT);")
-conn.commit()
-conn.close()
-
-"""
